@@ -7,15 +7,15 @@ class metric (α : Type _) :=
 instance int_metric : metric Int where
   distance x y := Int.natAbs (x-y)
 
-partial def levenshtein (x : List α) (y : List α) [BEq α] : Nat :=
-  match (x, y) with
-  | ([],[]) => 0
-  | ([],y) => y.length
-  | (x,[]) => x.length
-  | ((x::xs),(y::ys)) => if x == y then levenshtein xs ys
+def levenshtein (x' : List α) (y' : List α) [BEq α] : Nat :=
+  match x', y' with
+  | [],[] => 0
+  | [],y => y.length
+  | x,[] => x.length
+  | (x::xs),(y::ys) => if x == y then levenshtein xs ys
   else 1 + min3 (levenshtein xs (y::ys)) (levenshtein (x::xs) ys) (levenshtein xs ys)
 where min3 (a : Nat) (b : Nat) (c : Nat) : Nat := min (min a b) c
--- TODO: prove termination and remove `partial`.
+termination_by levenshtein x y _ => x.length + y.length
 
 instance levenshtein_metric {α: Type} [BEq α] : metric (List α) where
   distance x y := levenshtein x y
