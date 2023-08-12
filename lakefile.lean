@@ -9,3 +9,5 @@ package «BkTree» {
 lean_lib «BkTree» {
   -- add library configuration options here
 }
+
+require mathlib from git "https://github.com/leanprover-community/mathlib4" @ "master"
